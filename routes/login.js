@@ -18,8 +18,8 @@ router.post('/', (req, res) => {
     if (err) {
       return res.status(500).send({ error: err });
     }
-    bcrpt.compare(req.body.password, user.password, (err, res) => {
-      if (res) {
+    bcrpt.compare(req.body.password, user.password, (err, resp) => {
+      if (resp) {
         const token = jwt.sign({ _id: user }, "jwtkey");
         if (!token) {
           return res.status(404).send("Invalid user");
