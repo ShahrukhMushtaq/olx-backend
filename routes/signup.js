@@ -38,8 +38,8 @@ router.post('/add-user',  (req, res, next) => {
     if (user) return res.status(400).send("User already registered");
     if (err) return res.status(500).send({ error: err });
 
-    const salt = bcrpt.genSalt(10);
-    req.body.password = bcrpt.hash(req.body.password, salt);
+    // const salt = bcrpt.genSalt(10);
+    // req.body.password = bcrpt.hash(req.body.password, salt);
     user = new User({
       username: req.body.username,
       email: req.body.email,
