@@ -10,18 +10,18 @@ router.get('/', function (req, res, next) {
   res.send('respond with a user');
 });
 
-router.post('/', async (req, res) => {
-  let user = User.findOne({ email: req.body.email }, async (err, user) => {
+router.post('/', (req, res) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
       return res.status(400).send("Invalid email or password");
     }
-    const validPwd = await bcrpt.compare(req.body.password, user.password);
+    const validPwd = bcrpt.compare(req.body.password, user.password);
     if (!validPwd) {
       return res.status(400).send("Invalid password");
     }
     const token = jwt.sign({ _id: user }, "jwtkey");
-    if(!token) return res.status(404).send("Invalid User");
-    res.send({ user: user , token: token });
+    if (!token) return res.status(404).send("Invalid User");
+    res.send({ user: user, token: token });
   });
 });
 
