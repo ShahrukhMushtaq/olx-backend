@@ -15,13 +15,20 @@ router.post('/', (req, res) => {
     if (!user) {
       return res.status(400).send("Invalid email or password");
     }
-    const validPwd = bcrpt.compare(req.body.password, user.password);
-    if (!validPwd) {
-      return res.status(400).send("Invalid password");
+    if (err) {
+      return res.status(500).send({ error: err });
     }
-    const token = jwt.sign({ _id: user }, "jwtkey");
-    if (!token) return res.status(404).send("Invalid User");
-    res.send({ user: user, token: token });
+    bcrpt.compare(req.body.password, user.password, (err, res) => {
+      if (res) {
+        const token = jwt.sign({ _id: user }, "jwtkey");
+        if (!token) {
+          return res.status(404).send("Invalid user");
+        }
+        res.status(200).send({ user: user, token: token });
+      } else {
+        return res.status(400).send("Invalid password");
+      }
+    });
   });
 });
 
