@@ -7,13 +7,13 @@ const User = require('../models/User');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  res.send('respond with a user');
+  res.send({ message: 'respond with a user' });
 });
 
 router.post('/', (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
-      return res.status(400).send("Invalid email or password");
+      return res.status(400).send({ message: "Invalid email or password" });
     }
     if (err) {
       return res.status(500).send({ error: err });
@@ -22,11 +22,11 @@ router.post('/', (req, res) => {
       if (resp) {
         const token = jwt.sign({ _id: user }, "jwtkey");
         if (!token) {
-          return res.status(404).send("Invalid user");
+          return res.status(404).send({ message: "Invalid user" });
         }
         res.status(200).send({ user: user, token: token });
       } else {
-        return res.status(400).send("Invalid password");
+        return res.status(400).send({ message: "Invalid password" });
       }
     });
   });
