@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5
+    fileSize: 1024 * 1024 * 20
   }
 });
 
@@ -51,7 +51,7 @@ router.get('/fulladd/:id', (req, res) => {
 })
 
 router.post('/post', upload.single('productImage'), (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
   // console.log(req.file);
 
   User.findById(req.body.userId)

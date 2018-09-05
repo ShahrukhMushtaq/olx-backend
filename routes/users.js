@@ -4,8 +4,8 @@ const User = require('../models/User');
 
 /* GET users listing. */
 router.get('/:id', function (req, res, next) {
-  const { id } = req.params.id;
-  console.log(id);
+  const id = req.params.id;
+  // console.log(id);
   const user = User.findById(req.params.id);
   user.exec(function (error, user) {
     if (error) {
