@@ -15,12 +15,12 @@ var searchAdRouter = require('./routes/search-ad');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost:27017/olx_pwa', { useNewUrlParser: true });
-// mongoose.connect('mongodb://shahrukhmushtaq:shahrukh001@ds237832.mlab.com:37832/olx-pwa', { useNewUrlParser: true });
+// mongoose.connect('mongodb://localhost:27017/olx_pwa', { useNewUrlParser: true });
+mongoose.connect('mongodb://shahrukhmushtaq:shahrukh001@ds237832.mlab.com:37832/olx-pwa', { useNewUrlParser: true });
 
 mongoose.connection.on('connected', () => {
-  console.log('Connected to database mongodb @ 27017');
-  // console.log('Connected to database mLab');
+  // console.log('Connected to database mongodb @ 27017');
+  console.log('Connected to database mLab');
 });
 
 mongoose.connection.on('error', (err) => {
