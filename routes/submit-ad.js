@@ -3,6 +3,8 @@ var router = express.Router();
 const User = require('../models/User');
 const Ad = require('../models/submitAd');
 const multer = require('multer');
+const webpush = require('web-push');
+var USER_SUBSCRIPTIONS = require('../models/user-subscription');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -76,6 +78,28 @@ router.post('/post', upload.single('productImage'), (req, res) => {
         }
         return res.status(200).send({ ad: data });
       });
+      const notificationPayload = {
+        "notification": {
+            "title": "Ad News",
+            "body": "New Ads Available!",
+            "icon": "assets/olx-logo.png",
+            "vibrate": [100, 50, 100],
+            "data": {
+                "dateOfArrival": Date.now(),
+                "primaryKey": 1
+            },
+            "actions": [{
+                "action": "explore",
+                "title": "Go to the site"
+            }]
+        }
+    };
+    Promise.all(USER_SUBSCRIPTIONS.map(sub => webpush.sendNotification(sub, JSON.stringify(notificationPayload))))
+    .then(() => res.status(200).json({ message: 'Ad sent successfully.' }))
+        .catch(err => {
+            console.error("Error sending notification, reason: ", err);
+            res.sendStatus(500);
+        });
     })
     .catch(err => {
       console.log(err);

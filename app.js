@@ -5,6 +5,16 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 const mongoose = require('mongoose');
+const webpush = require('web-push');
+const vapidKeys = {
+  "publicKey":'BA39bIgjc0bha3q0YQ_JID8PzY-c4FrIzsiGlrDiP8nSHKpKxATO363znw8-D5JyhJn418DGxt8nJO3hi7R6JFE',
+  "privateKey":'adISDtUh5cYptob24NGivQ6QdFeq7cYnjVsjF7zEtH0'
+};
+webpush.setVapidDetails(
+  'mailto:example@yourdomain.org',
+  vapidKeys.publicKey,
+  vapidKeys.privateKey
+);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -12,6 +22,7 @@ var loginRouter = require('./routes/login');
 var signupRouter = require('./routes/signup');
 var submitAdRouter = require('./routes/submit-ad');
 var searchAdRouter = require('./routes/search-ad');
+var pushNotif = require('./routes/push-notif')
 
 var app = express();
 
@@ -56,6 +67,7 @@ app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
 app.use('/api/submit-ad', submitAdRouter);
 app.use('/api/search-ad', searchAdRouter);
+app.use('/api/notifications', pushNotif);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
