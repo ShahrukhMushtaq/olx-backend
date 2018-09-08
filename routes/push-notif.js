@@ -19,6 +19,6 @@ router.post('/', (req, res) => {
 
     // USER_SUBSCRIPTIONS.push(sub);
 
-    res.status(200).json({ message: "Subscription added successfully." });
+    // res.status(200).json({ message: "Subscription added successfully." });
 });
 module.exports = router;
