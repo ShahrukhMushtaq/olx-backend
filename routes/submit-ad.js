@@ -96,7 +96,7 @@ router.post('/post', upload.single('productImage'), (req, res) => {
               }]
             }
           };
-          Promise.all(res.user_subscription.map(sub => webpush.sendNotification(sub, JSON.stringify(notificationPayload))))
+          Promise.all(res.map(sub => webpush.sendNotification(sub, JSON.stringify(notificationPayload))))
             .then(() => res.status(200).json({ message: 'Ad sent successfully.' }))
             .catch(err => {
               console.error("Error sending notification, reason: ", err);
