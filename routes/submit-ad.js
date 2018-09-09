@@ -97,13 +97,14 @@ router.post('/post', upload.single('productImage'), (req, res) => {
             }
           };
           Promise.all(res.map(sub => webpush.sendNotification(sub.user_subscription, JSON.stringify(notificationPayload))))
-            .then(() => res.status(200).send({ ad: data }))
+            .then(() => res.status(200).send({ message: 'Ad sent successfully.' }))
             .catch(err => {
               console.error("Error sending notification, reason: ", err);
-              res.status(500).send({error: err});
+              res.sendStatus(500);
             });
-          return res.status(200).send({ ad: data });
+          
         })
+        return res.status(200).send({ ad: data });
       });
     })
     .catch(err => {
