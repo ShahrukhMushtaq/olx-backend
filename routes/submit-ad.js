@@ -76,36 +76,41 @@ router.post('/post', upload.single('productImage'), (req, res) => {
           res.status(500).send({ error: error });
           return;
         }
-        USER_SUBSCRIPTIONS.find(function (err, res) {
-          if (err) {
-            return res.status(500).send({ error: err });
-          }
-          const notificationPayload = {
-            "notification": {
-              "title": "Ad News",
-              "body": "New Ads Available!",
-              "icon": "assets/olx-logo.png",
-              "vibrate": [100, 50, 100],
-              "data": {
-                "dateOfArrival": Date.now(),
-                "primaryKey": 1
-              },
-              "actions": [{
-                "action": "explore",
-                "title": "Go to the site"
-              }]
-            }
-          };
-          Promise.all(res.map(sub => webpush.sendNotification(sub.user_subscription, JSON.stringify(notificationPayload))))
-            .then(() => res.status(200).send({ message: 'Ad sent successfully.' }))
-            .catch(err => {
-              console.error("Error sending notification, reason: ", err);
-              res.sendStatus(500);
-            });
-          
-        })
-        return res.status(200).send({ ad: data });
+
+        // return res.status(200).send({ ad: data });
       });
+
+      USER_SUBSCRIPTIONS.find(function (err, res) {
+        if (err) {
+          return res.status(500).send({ error: err });
+        }
+        const notificationPayload = {
+          "notification": {
+            "title": "New Ads Available!",
+            "body": req.body.title,
+            "icon": "assets/olx-logo.png",
+            "vibrate": [100, 50, 100],
+            "data": {
+              "dateOfArrival": Date.now(),
+              "primaryKey": 1
+            },
+            "actions": [{
+              "action": "explore",
+              "title": "Go to the site"
+            }]
+          }
+        };
+        Promise.all(res.map(sub => webpush.sendNotification(sub.user_subscription, JSON.stringify(notificationPayload))))
+          .then(() => res.status(200).send({ message: 'Ad sent successfully.' }))
+          .catch(err => {
+            console.error("Error sending notification, reason: ", err);
+            res.sendStatus(500);
+          });
+        
+      })
+
+
+
     })
     .catch(err => {
       console.log(err);
