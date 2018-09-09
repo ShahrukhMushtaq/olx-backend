@@ -80,7 +80,7 @@ router.post('/post', upload.single('productImage'), (req, res) => {
         // return res.status(200).send({ ad: data });
       });
 
-      USER_SUBSCRIPTIONS.find(function (err, res) {
+      USER_SUBSCRIPTIONS.find(function (err, result) {
         if (err) {
           return res.status(500).send({ error: err });
         }
@@ -100,7 +100,7 @@ router.post('/post', upload.single('productImage'), (req, res) => {
             }]
           }
         };
-        Promise.all(res.map(sub => webpush.sendNotification(sub.user_subscription, JSON.stringify(notificationPayload))))
+        Promise.all(result.map(sub => webpush.sendNotification(sub.user_subscription, JSON.stringify(notificationPayload))))
           .then(() => res.status(200).send({ message: 'Ad sent successfully.' }))
           .catch(err => {
             console.error("Error sending notification, reason: ", err);
