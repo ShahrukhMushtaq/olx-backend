@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var USER_SUBSCRIPTIONS = require('../models/user-subscription');
+
 router.post('/', (req, res) => {
     const sub = req.body;
 
@@ -16,9 +17,5 @@ router.post('/', (req, res) => {
         }
         res.status(200).send({ message: "User subscribed successfully" });
     });
-
-    // USER_SUBSCRIPTIONS.push(sub);
-
-    // res.status(200).json({ message: "Subscription added successfully." });
 });
 module.exports = router;

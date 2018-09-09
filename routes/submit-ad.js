@@ -106,11 +106,8 @@ router.post('/post', upload.single('productImage'), (req, res) => {
             console.error("Error sending notification, reason: ", err);
             res.sendStatus(500);
           });
-        
+
       })
-
-
-
     })
     .catch(err => {
       console.log(err);

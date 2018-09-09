@@ -7,8 +7,8 @@ var cors = require('cors');
 const mongoose = require('mongoose');
 const webpush = require('web-push');
 const vapidKeys = {
-  "publicKey":'BA39bIgjc0bha3q0YQ_JID8PzY-c4FrIzsiGlrDiP8nSHKpKxATO363znw8-D5JyhJn418DGxt8nJO3hi7R6JFE',
-  "privateKey":'adISDtUh5cYptob24NGivQ6QdFeq7cYnjVsjF7zEtH0'
+  "publicKey": 'BA39bIgjc0bha3q0YQ_JID8PzY-c4FrIzsiGlrDiP8nSHKpKxATO363znw8-D5JyhJn418DGxt8nJO3hi7R6JFE',
+  "privateKey": 'adISDtUh5cYptob24NGivQ6QdFeq7cYnjVsjF7zEtH0'
 };
 webpush.setVapidDetails(
   'mailto:example@yourdomain.org',
@@ -25,6 +25,21 @@ var searchAdRouter = require('./routes/search-ad');
 var pushNotif = require('./routes/push-notif')
 
 var app = express();
+let http = require('http').Server(app);
+let io = require('socket.io')(http);
+io.on('connection', (socket) => {
+
+  console.log('user connected');
+
+  socket.on('disconnect', function () {
+    console.log('user disconnected');
+  });
+
+  socket.on('message', (message) => {
+    console.log("Message Received: " + message);
+    io.emit('message', { type: 'new-message', text: message });
+  });
+});
 
 // mongoose.connect('mongodb://localhost:27017/olx_pwa', { useNewUrlParser: true });
 mongoose.connect('mongodb://shahrukhmushtaq:shahrukh001@ds237832.mlab.com:37832/olx-pwa', { useNewUrlParser: true });
